@@ -19,7 +19,7 @@ SieveDepth = ceil(SieveMinSize/WheelLength);
 %The sieve's # of rows can be 1/2 the wheel length since the prime factor
 %'2' is easy to implicitly eliminate: it occurs at a regular frequency. 
 Sieve = true(WheelLength/2,SieveDepth);
-SieveSize = (WheelLength/2)*
+SieveSize = (WheelLength/2)*SieveDepth;
 
 %Compile a vector of rows that are composite (ie. multiples of the seed
 %primes used in the wheel).
@@ -45,6 +45,22 @@ for S=2:NumSeed
 end
 
 %Sieve remaining primes. Here begins the "slow" part probably.
-for P=((Seed(NumSeed)+2)+1)/2:WheelLength/2
-    if Sieve(P)
-      for 
+%First column starting after seed primes
+for K=((Seed(NumSeed)+2)+1)/2:WheelLength/2
+    if Sieve(K,1)
+      for M=3*K-1: 2*K-1: SieveSize
+          Sieve(mod(M,WheelLength/2),ceil((2*M)/WheelLength))=false;
+      end
+    end
+end
+%Remainder of sieve, column by column
+for j=2:SieveDepth
+    for i=1:WheelLength/2
+        if Sieve(i,j)
+            K = (j-1)*(WheelLength/2)+i;
+            for M=3*K-1: 2*K-1: SieveSize
+                Sieve(mod(M,WheelLength/2),ceil((2*M)/WheelLength))=false;
+            end
+        end
+    end
+end
