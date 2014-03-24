@@ -1,4 +1,5 @@
-TestPrime = 11111600851475143;%600851475143
+tic
+TestPrime = 600851475143;%600851475143
 
 %We plan to make a sieve up to the sqrt of TestPrime. Every prime factor
 %has a brother that when multiplied by gives us TestPrime. We will find at
@@ -12,8 +13,8 @@ WheelLength = 1;
 %We choose a WheelLength that gives us a "mostly" square sieve matrix to
 %get the most out of vectorization
 while WheelLength^2 < SieveMinSize
-    WheelLength = prod(Seed(1:NumSeed));
     NumSeed = NumSeed +1;
+    WheelLength = prod(Seed(1:NumSeed));
 end
 
 %We find all the wheel "spokes" that are multiples of the primes used for
@@ -30,24 +31,29 @@ SieveDepth = ceil(SieveMinSize/(2*WheelLength));
 Sieve = true(WheelLength,SieveDepth);
 SieveLength = numel(Sieve);
 %We only need to sieve up to sqrt of the largest number in the Sieve
-SievePivot = floor(sqrt((2*SieveLength)-1));
+SievePivot = sqrt((2*SieveLength)-1);
 
+%All spokes in the wheel are composite, except the prime Seeds
 Sieve(WheelSpokes,:) = false;
 Sieve((Seed+1)/2) = true;
 Sieve(1) = false;
 
 %Starting after the last Seed prime check to see if the number is prime
 %(true). If it is prime then all multiples in the sieve are checked off.
+
 for K=(Seed(NumSeed)+3)/2:floor((SievePivot+1)/2)
     if Sieve(K)
         Sieve(3*K-1: 2*K-1: SieveLength) = false;
     end
 end
 
-%Returns vector of primes up to SieveMinSize, including '0' at beginning
-Sieve = reshape(Sieve,SieveLength,1);
-SieveVal = Sieve .* [1:2:2*SieveLength-1]';
+%Returns vector of primes up to SieveMinSize
+if SieveDepth>1
+    SieveVal = (find(reshape(Sieve,SieveLength,1)).*2)-1;
+else
+    SieveVal = (find(Sieve).*2)-1;
+end
 
-Factors = and(TestPrime./SieveVal == floor(TestPrime./SieveVal),Sieve);
-
-TestPrime./SieveVal(find(Factors))
+Factors = find(TestPrime./SieveVal == floor(TestPrime./SieveVal));
+toc
+sprintf('%.0f ', TestPrime./SieveVal(Factors))
