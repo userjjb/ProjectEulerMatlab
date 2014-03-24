@@ -1,4 +1,4 @@
-TestPrime = 1085147514360085147;%600851475143
+TestPrime = 11111600851475143;%600851475143
 
 %We plan to make a sieve up to the sqrt of TestPrime. Every prime factor
 %has a brother that when multiplied by gives us TestPrime. We will find at
@@ -45,6 +45,9 @@ for K=(Seed(NumSeed)+3)/2:floor((SievePivot+1)/2)
 end
 
 %Returns vector of primes up to SieveMinSize, including '0' at beginning
-SieveVal = unique(reshape(Sieve,SieveLength,1) .* [1:2:2*SieveLength-1]');
+Sieve = reshape(Sieve,SieveLength,1);
+SieveVal = Sieve .* [1:2:2*SieveLength-1]';
 
-Factors = TestPrime./SieveVal == floor(TestPrime./SieveVal);
+Factors = and(TestPrime./SieveVal == floor(TestPrime./SieveVal),Sieve);
+
+TestPrime./SieveVal(find(Factors))
