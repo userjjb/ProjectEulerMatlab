@@ -1,6 +1,6 @@
 function [GreatPrimeFactor] = GreatestPrimeFactor(TrialNum)
 %Returns greatest prime factor of TrialNum
-%600851475143
+%Use 600851475143 for Euler Prob 3
 [Complements,PrimeFactors,PrimeFlag] = PrimeFactorsUntilSqrt(TrialNum);
 if PrimeFlag, GreatPrimeFactor=TrialNum; return, end
 
