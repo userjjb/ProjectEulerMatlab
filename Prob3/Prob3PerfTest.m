@@ -14,14 +14,14 @@ dcval = 0;
 for v=1:SizerB*100
     if Tester/TestMat(v) == floor(Tester/TestMat(v))
         dchit = dchit+1;
-        dcval = v
+        dcval = v;
     end
 end
 dchit
 
 % Vectorization candidates
 resul = Tester./TestMat == floor(Tester./TestMat);
-where = find(resul)
+where = find(resul);
 
 resul1B = Tester./TestMat == round(Tester./TestMat);
 

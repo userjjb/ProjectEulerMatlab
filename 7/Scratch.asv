@@ -26,7 +26,7 @@ error=round(interp(xx))-peye(xx);
 plot(xx,error)
 norm(error)
 
-Np2=10;%78 min absolute bound, 137 min L2 error
+Np2=10;
 Nh=10;
 [Qx2,Qw2]=GLquad(Np2);
 Edges= round(linspace(1,Range,Nh+1));
