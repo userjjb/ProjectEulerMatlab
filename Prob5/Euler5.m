@@ -3,4 +3,4 @@ function [LCM] = Euler5(N)
 %to accomadate veeeery large numbers (~10000 digits long in 1 sec)
     P = sym(primes(N));
     A = P(P<=sqrt(N));
-    LCM = prod(A.^(floor(log(N)./log(A))-1))*prod(P);
+    LCM = prod(A.^(floor((log(N)+eps(N))./log(A))-1))*prod(P);
